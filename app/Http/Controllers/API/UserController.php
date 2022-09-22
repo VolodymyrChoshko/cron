@@ -39,15 +39,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+
         $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'company_id' => 'required',
-            'country_id' => 'required',
-            'password' => 'required',
-            'phone' => 'required',
+            'name' => 'required|string|min:3|max:50',
+            'email' => 'required|string|email|max:100|unique:users',
+            'first_name' => 'required|string|min:3|max:50',
+            'last_name' => 'required|string|min:3|max:50',
+            'company_id' => 'required|numeric',
+            'country_id' => 'required|numeric',
+            'password' => 'required|string|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
         ]);
         if($validator->fails()){
             return response()->json([
@@ -57,7 +58,18 @@ class UserController extends Controller
             ]);
         }
 
-        $user = User::create($input);
+        $newdata = [
+            'name'=> $request->name,
+            'email'=> $request->email,
+            'first_name'=> $request->first_name,
+            'last_name'=> $request->last_name,
+            'company_id'=> $request->company_id,
+            'country_id'=> $request->country_id,
+            'password'=> bcrypt($request->password),
+            'phone'=> $request->phone,
+        ];
+
+        $user = User::create($newdata);
 
         return response()->json($user);
     }
@@ -93,8 +105,51 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //TODO Check Validation
-        $result = $user->update($request->all());
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'name' => 'nullable|string|min:3|max:50',
+            'email' => 'nullable|string|email|max:100|unique:users',
+            'first_name' => 'nullable|string|min:3|max:50',
+            'last_name' => 'nullable|string|min:3|max:50',
+            'company_id' => 'nullable|numeric',
+            'country_id' => 'nullable|numeric',
+            'password' => 'nullable|string|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                "error" => "Validation Error",
+                "code"=> 0,
+                "message"=> $validator->errors()
+            ]);
+        }
+
+        $newdata = [];
+        if($request->name){
+            $newdata['name'] = $request->name;
+        }
+        if($request->email){
+            $newdata['email'] = $request->email;
+        }
+        if($request->first_name){
+            $newdata['first_name'] = $request->first_name;
+        }
+        if($request->last_name){
+            $newdata['last_name'] = $request->last_name;
+        }
+        if($request->company_id){
+            $newdata['company_id'] = $request->company_id;
+        }
+        if($request->password){
+            $newdata['password'] = bcrypt($request->password);
+        }
+        if($request->phone){
+            $newdata['phone'] = $request->phone;
+        }
+        if($request->country_id){
+            $newdata['country_id'] = $request->country_id;
+        }
+        $result = $user->update($newdata);
         return response()->json($user);
     }
 
