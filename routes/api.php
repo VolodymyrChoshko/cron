@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
+
+use App\Http\Controllers\Api\UserController;use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,6 @@ Route::prefix('auth')->controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
 });
+
+// Test mode (should be in auth:sanctum)
+Route::apiResource('users', UserController::class);
