@@ -7,6 +7,9 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\KeyController;
+use App\Http\Controllers\Api\KeysCodeController;
+use App\Http\Controllers\Api\KeysRefController;
+use App\Http\Controllers\Api\KeysSmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +38,6 @@ Route::prefix('auth')->controller(AuthController::class)->group(function () {
 Route::apiResource('users', UserController::class);
 Route::apiResource('notifications', NotificationController::class);
 Route::apiResource('keys', KeyController::class);
+Route::apiResource('keys_codes', KeysCodeController::class);
+Route::apiResource('keys_refs', KeysRefController::class);
+Route::apiResource('keys_smses', KeysSmsController::class);
