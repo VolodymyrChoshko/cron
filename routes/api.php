@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\UserController;use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +32,4 @@ Route::prefix('auth')->controller(AuthController::class)->group(function () {
 
 // Test mode (should be in auth:sanctum)
 Route::apiResource('users', UserController::class);
+Route::apiResource('notifications', NotificationController::class);
